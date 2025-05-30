@@ -39,7 +39,6 @@ int main() {
   a.bits |= a.mask << 1;
   print_byte(a);
 
-  for (int j=0;j<5;j++){
   for (int i=0;i<8;i++) {
   int k = i;
   int r = nand((a.bits >> k) & a.mask, (a.bits >> (k - 1)) & a.mask);
@@ -51,8 +50,6 @@ int main() {
   
   print_byte(a);
   //printf("%d\n", a.bits);
-  }
-  printf("\n");
   }
   
 }
