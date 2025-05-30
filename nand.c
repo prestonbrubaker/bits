@@ -32,24 +32,27 @@ long exp22(int a) {
 int main() {
 
   Bits a;
-  a.bits = 0;
+  a.bits = 255;
   a.mask = 1;
   a.carry = 1;
   print_byte(a);
   a.bits |= a.mask << 1;
   print_byte(a);
 
-
-  for (int i=1;i<8;i++) {
+  for (int j=0;j<5;j++){
+  for (int i=0;i<8;i++) {
   int k = i;
-  int r = 1;//nand((a.bits >> k) & a.mask, (a.bits >> (k - 1)) & a.mask);
-  if (r && !((a.bits << k) & 1)){
-    a.bits += 1 << k;
-  } else if (!r && ((a.bits >> k) & 1)) {
-    a.bits -= 1 << k;
+  int r = nand((a.bits >> k) & a.mask, (a.bits >> (k - 1)) & a.mask);
+  if (r) {
+    a.bits |= (1 << k);
+  } else {
+    a.bits &= ~(1 << k);
   }
   
   print_byte(a);
+  //printf("%d\n", a.bits);
+  }
+  printf("\n");
   }
   
 }
