@@ -1,10 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define BIT_COUNT 32
+
 typedef struct {
-    unsigned int bits : 16;
-    unsigned int mask : 16;
-    unsigned int carry : 1;
+    unsigned long long bits : BIT_COUNT;
+    unsigned long long mask : BIT_COUNT;
+    unsigned long long carry : 1;
+    unsigned long long counter : BIT_COUNT;
 } Bits;
 
 
@@ -34,11 +37,12 @@ int xnor(int a, int b){
 
 
 int print_byte(Bits a) {
-  for (int i=15;i>=0;i--){
+  for (int i=BIT_COUNT - 1;i>=0;i--){
     a.mask = 1;
-    printf("%d",(a.bits >> i) & a.mask);
+    int r = (a.bits >> i) & a.mask;
+    printf("%d",r);
   }
-  printf("   %d\n", a.carry);
+  printf("\n");
 }
 
 
@@ -48,6 +52,7 @@ int main() {
   a.bits = 0;
   a.mask = 1;
   a.carry = 1;
+  a.counter = 0;
   print_byte(a);
 
   for (int a=0;a<2;a++){
@@ -57,11 +62,13 @@ int main() {
   }
   }
 
-  for(unsigned long int j=0;j<1<<31;j++){
+  for(a.counter=0;a.counter<1<<BIT_COUNT - 1;a.counter++){
     a.carry = 1;
-    for (int i=0;i<16;i++){
+    a.mask = 1;
+    for (int i=0;i<BIT_COUNT;i++){
       int w = a.bits>>i&1;
       int r = xor(w,a.carry);
+      a.mask = 1;
       if(r){
         a.bits |= 1<<i;
         a.carry = 0;
